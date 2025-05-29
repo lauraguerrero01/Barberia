@@ -1,0 +1,144 @@
+DROP DATABASE IF exists barberia;
+CREATE DATABASE Barberia;
+
+USE Barberia;
+
+CREATE TABLE TipoDocumento (
+	idTipo INT NOT NULL auto_increment,
+    nombre varchar (255) NOT NULL,
+    PRIMARY KEY (idTipo)
+);
+
+CREATE TABLE Cliente (
+	idCliente INT NOT NULL auto_increment,
+    numdoc INT NOT NULL,
+    nombre varchar (50) NOT NULL,
+    apellido varchar (50) NOT NULL,
+    telefono varchar (20) NOT NULL,
+    correo varchar (100) NOT NULL,
+    idTipoDoc INT NOT NULL,
+    PRIMARY KEY (idCliente)
+);
+
+CREATE TABLE Barbero (
+	idBarbero INT NOT NULL auto_increment,
+    numdoc INT NOT NULL,
+    nombre varchar (50) NOT NULL,
+    apellido varchar (50) NOT NULL,
+    idTipoDoc INT NOT NULL,
+    PRIMARY KEY (idBarbero)
+);
+
+CREATE TABLE Cita (
+	idCita INT NOT NULL auto_increment,
+    fechaYhora datetime NOT NULL,
+    idEstadoCita INT NOT NULL,
+    idCliente int NOT NULL,
+    idBarbero INT NOT NULL,
+    PRIMARY KEY (idCita)
+);
+
+CREATE TABLE Estado_Cita (
+	idEstadoCita INT NOT NULL AUTO_INCREMENT,
+    Estado BIT NOT NULL,
+    Descripcion VARCHAR (30) NOT NULL,
+    PRIMARY KEY (idEstadoCita)
+);
+
+CREATE TABLE Servicio (
+	idServicio INT NOT NULL auto_increment,
+    nombre varchar (50) NOT NULL,
+    precio decimal (7,2) NOT NULL,
+    imagen varchar (255) NOT NULL,
+    idCita INT NOT NULL,
+    PRIMARY KEY (idServicio)
+);
+
+CREATE TABLE Factura (
+	idFactura INT NOT NULL auto_increment,
+    fechaYhora datetime NOT NULL,
+    subtotal decimal (7,2) NOT NULL,
+    impuestos decimal (7,2) NOT NULL,
+    totalFactura decimal (7,2) NOT NULL,
+    idCliente int NOT NULL,
+    PRIMARY KEY (idFactura)
+);
+
+CREATE TABLE Categorias (
+	idCategoria INT not null auto_increment,
+    nombre varchar (50),
+    PRIMARY KEY (idCategoria)
+);
+
+CREATE TABLE Producto (
+	idProducto INT NOT NULL auto_increment,
+	nombre varchar (50) NOT NULL,
+    precio decimal (7,2) NOT NULL,
+    imagen varchar (255) NOT NULL,
+    estado bit NOT NULL,
+    PRIMARY KEY (idProducto)
+);
+
+CREATE TABLE Servicio_Factura (
+	idServicio INT NOT NULL,
+    idFactura INT NOT NULL,
+    PRIMARY KEY (idServicio, idFactura)
+);
+
+CREATE TABLE Producto_Factura (
+	idProducto INT NOT NULL,
+    idFactura INT NOT NULL,
+    PRIMARY KEY (idProducto, idFactura)
+);
+
+CREATE TABLE Categorias_Producto (
+	idCategoria INT NOT NULL,
+    idProducto INT NOT NULL,
+	PRIMARY KEY (idCategoria, idProducto)
+);
+
+ALTER TABLE Cliente
+ADD constraint FK_TipoDocumento_Cliente
+foreign key (idTipoDoc) REFERENCES TipoDocumento (idTipo);
+
+ALTER TABLE Barbero
+ADD constraint FK_TipoDocumento_Barbero
+foreign key (idTipoDoc) REFERENCES TipoDocumento (idTipo);
+
+ALTER TABLE Cita
+ADD constraint FK_EstadoCita_Cita
+foreign key (idEstadoCita) REFERENCES Estado_Cita (idEstadoCita);
+
+ALTER TABLE Cita
+ADD constraint FK_Cliente_Cita
+foreign key (idCliente) REFERENCES Cliente (idCliente);
+
+ALTER TABLE Cita
+ADD constraint FK_Barbero_Cita
+foreign key (idBarbero) REFERENCES Barbero (idBarbero);
+
+ALTER TABLE Servicio
+ADD constraint FK_Cita_Servicio
+foreign key (idCita) REFERENCES Cita (idCita);
+
+ALTER TABLE Factura
+ADD constraint FK_Cliente_Factura
+foreign key (idCliente) REFERENCES Cliente (idCliente);
+
+ALTER TABLE Producto_Factura
+ADD constraint FK_ProductoFactura_Producto
+foreign key (idProducto) REFERENCES Producto (idProducto),
+ADD constraint FK_ProductoFactura_Factura
+foreign key (idFactura) REFERENCES Factura (idFactura);
+
+ALTER TABLE Servicio_Factura
+ADD constraint FK_ServicioFactura_Servicio
+foreign key (idServicio) REFERENCES Servicio (idServicio),
+ADD constraint FK_ServicioFactura_Factura
+foreign key (idFactura) REFERENCES Factura (idFactura);
+
+ALTER TABLE Categorias_Producto
+ADD constraint FK_CategoriasProducto_Categoria
+foreign key (idCategoria) REFERENCES Categorias (idCategoria),
+ADD constraint FK_CategoriasProducto_Producto
+foreign key (idProducto) REFERENCES Producto (idProducto);
