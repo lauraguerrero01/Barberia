@@ -1,144 +1,154 @@
-DROP DATABASE IF exists barberia;
+DROP DATABASE IF EXISTS barberia;
 CREATE DATABASE Barberia;
 
 USE Barberia;
 
 CREATE TABLE TipoDocumento (
-	idTipo INT NOT NULL auto_increment,
-    nombre varchar (255) NOT NULL,
+    idTipo INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(255) NOT NULL,
     PRIMARY KEY (idTipo)
 );
 
 CREATE TABLE Cliente (
-	idCliente INT NOT NULL auto_increment,
+    idCliente INT NOT NULL AUTO_INCREMENT,
     numdoc INT NOT NULL,
-    nombre varchar (50) NOT NULL,
-    apellido varchar (50) NOT NULL,
-    telefono varchar (20) NOT NULL,
-    correo varchar (100) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    correo VARCHAR(100) NOT NULL,
     idTipoDoc INT NOT NULL,
     PRIMARY KEY (idCliente)
 );
 
 CREATE TABLE Barbero (
-	idBarbero INT NOT NULL auto_increment,
+    idBarbero INT NOT NULL AUTO_INCREMENT,
     numdoc INT NOT NULL,
-    nombre varchar (50) NOT NULL,
-    apellido varchar (50) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
     idTipoDoc INT NOT NULL,
     PRIMARY KEY (idBarbero)
 );
 
 CREATE TABLE Cita (
-	idCita INT NOT NULL auto_increment,
-    fechaYhora datetime NOT NULL,
+    idCita INT NOT NULL AUTO_INCREMENT,
+    fechaYhora DATETIME NOT NULL,
     idEstadoCita INT NOT NULL,
-    idCliente int NOT NULL,
+    idCliente INT NOT NULL,
     idBarbero INT NOT NULL,
     PRIMARY KEY (idCita)
 );
 
 CREATE TABLE Estado_Cita (
-	idEstadoCita INT NOT NULL AUTO_INCREMENT,
-    Estado BIT NOT NULL,
-    Descripcion VARCHAR (30) NOT NULL,
+    idEstadoCita INT NOT NULL AUTO_INCREMENT,
+    estado BIT NOT NULL,
+    descripcion VARCHAR(30) NOT NULL,
     PRIMARY KEY (idEstadoCita)
 );
 
 CREATE TABLE Servicio (
-	idServicio INT NOT NULL auto_increment,
-    nombre varchar (50) NOT NULL,
-    precio decimal (7,2) NOT NULL,
-    imagen varchar (255) NOT NULL,
+    idServicio INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    precio DECIMAL(7,2) NOT NULL,
+    imagen VARCHAR(255) NOT NULL,
     idCita INT NOT NULL,
     PRIMARY KEY (idServicio)
 );
 
 CREATE TABLE Factura (
-	idFactura INT NOT NULL auto_increment,
-    fechaYhora datetime NOT NULL,
-    subtotal decimal (7,2) NOT NULL,
-    impuestos decimal (7,2) NOT NULL,
-    totalFactura decimal (7,2) NOT NULL,
-    idCliente int NOT NULL,
+    idFactura INT NOT NULL AUTO_INCREMENT,
+    fechaYhora DATETIME NOT NULL,
+    subtotal DECIMAL(7,2) NOT NULL,
+    impuestos DECIMAL(7,2) NOT NULL,
+    totalFactura DECIMAL(7,2) NOT NULL,
+    idCliente INT NOT NULL,
     PRIMARY KEY (idFactura)
 );
 
 CREATE TABLE Categorias (
-	idCategoria INT not null auto_increment,
-    nombre varchar (50),
+    idCategoria INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(30),
     PRIMARY KEY (idCategoria)
 );
 
 CREATE TABLE Producto (
-	idProducto INT NOT NULL auto_increment,
-	nombre varchar (50) NOT NULL,
-    precio decimal (7,2) NOT NULL,
-    imagen varchar (255) NOT NULL,
-    estado bit NOT NULL,
+    idProducto INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    precio DECIMAL(7,2) NOT NULL,
+    imagen VARCHAR(255) NOT NULL,
     PRIMARY KEY (idProducto)
 );
 
 CREATE TABLE Servicio_Factura (
-	idServicio INT NOT NULL,
+    idServicio INT NOT NULL,
     idFactura INT NOT NULL,
     PRIMARY KEY (idServicio, idFactura)
 );
 
 CREATE TABLE Producto_Factura (
-	idProducto INT NOT NULL,
+    idProducto INT NOT NULL,
     idFactura INT NOT NULL,
     PRIMARY KEY (idProducto, idFactura)
 );
 
 CREATE TABLE Categorias_Producto (
-	idCategoria INT NOT NULL,
+    idCategoria INT NOT NULL,
     idProducto INT NOT NULL,
-	PRIMARY KEY (idCategoria, idProducto)
+    PRIMARY KEY (idCategoria, idProducto)
 );
 
 ALTER TABLE Cliente
-ADD constraint FK_TipoDocumento_Cliente
-foreign key (idTipoDoc) REFERENCES TipoDocumento (idTipo);
+ADD CONSTRAINT FK_TipoDocumento_Cliente
+FOREIGN KEY (idTipoDoc) REFERENCES TipoDocumento (idTipo);
 
 ALTER TABLE Barbero
-ADD constraint FK_TipoDocumento_Barbero
-foreign key (idTipoDoc) REFERENCES TipoDocumento (idTipo);
+ADD CONSTRAINT FK_TipoDocumento_Barbero
+FOREIGN KEY (idTipoDoc) REFERENCES TipoDocumento (idTipo);
 
 ALTER TABLE Cita
-ADD constraint FK_EstadoCita_Cita
-foreign key (idEstadoCita) REFERENCES Estado_Cita (idEstadoCita);
+ADD CONSTRAINT FK_EstadoCita_Cita
+FOREIGN KEY (idEstadoCita) REFERENCES Estado_Cita (idEstadoCita);
 
 ALTER TABLE Cita
-ADD constraint FK_Cliente_Cita
-foreign key (idCliente) REFERENCES Cliente (idCliente);
+ADD CONSTRAINT FK_Cliente_Cita
+FOREIGN KEY (idCliente) REFERENCES Cliente (idCliente);
 
 ALTER TABLE Cita
-ADD constraint FK_Barbero_Cita
-foreign key (idBarbero) REFERENCES Barbero (idBarbero);
+ADD CONSTRAINT FK_Barbero_Cita
+FOREIGN KEY (idBarbero) REFERENCES Barbero (idBarbero);
 
 ALTER TABLE Servicio
-ADD constraint FK_Cita_Servicio
-foreign key (idCita) REFERENCES Cita (idCita);
+ADD CONSTRAINT FK_Cita_Servicio
+FOREIGN KEY (idCita) REFERENCES Cita (idCita);
 
 ALTER TABLE Factura
-ADD constraint FK_Cliente_Factura
-foreign key (idCliente) REFERENCES Cliente (idCliente);
+ADD CONSTRAINT FK_Cliente_Factura
+FOREIGN KEY (idCliente) REFERENCES Cliente (idCliente);
 
 ALTER TABLE Producto_Factura
-ADD constraint FK_ProductoFactura_Producto
-foreign key (idProducto) REFERENCES Producto (idProducto),
-ADD constraint FK_ProductoFactura_Factura
-foreign key (idFactura) REFERENCES Factura (idFactura);
+ADD CONSTRAINT FK_ProductoFactura_Producto
+FOREIGN KEY (idProducto) REFERENCES Producto (idProducto),
+ADD CONSTRAINT FK_ProductoFactura_Factura
+FOREIGN KEY (idFactura) REFERENCES Factura (idFactura);
 
 ALTER TABLE Servicio_Factura
-ADD constraint FK_ServicioFactura_Servicio
-foreign key (idServicio) REFERENCES Servicio (idServicio),
-ADD constraint FK_ServicioFactura_Factura
-foreign key (idFactura) REFERENCES Factura (idFactura);
+ADD CONSTRAINT FK_ServicioFactura_Servicio
+FOREIGN KEY (idServicio) REFERENCES Servicio (idServicio),
+ADD CONSTRAINT FK_ServicioFactura_Factura
+FOREIGN KEY (idFactura) REFERENCES Factura (idFactura);
 
 ALTER TABLE Categorias_Producto
-ADD constraint FK_CategoriasProducto_Categoria
-foreign key (idCategoria) REFERENCES Categorias (idCategoria),
-ADD constraint FK_CategoriasProducto_Producto
-foreign key (idProducto) REFERENCES Producto (idProducto);
+ADD CONSTRAINT FK_CategoriasProducto_Categoria
+FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
+ADD CONSTRAINT FK_CategoriasProducto_Producto
+FOREIGN KEY (idProducto) REFERENCES Producto (idProducto);
+
+#DROP TABLE IF EXISTS Historial_Citas;
+CREATE TABLE Historial_Citas (
+    idHistorico INT AUTO_INCREMENT PRIMARY KEY,
+    idCita INT NOT NULL,
+    accion VARCHAR(50) NOT NULL,
+    fecha_hora DATETIME NOT NULL,
+    detalles TEXT,
+    FOREIGN KEY (idCita) REFERENCES Cita(idCita)
+    ON DELETE CASCADE
+);
