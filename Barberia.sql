@@ -142,7 +142,7 @@ FOREIGN KEY (idCategoria) REFERENCES Categorias (idCategoria),
 ADD CONSTRAINT FK_CategoriasProducto_Producto
 FOREIGN KEY (idProducto) REFERENCES Producto (idProducto);
 
-#DROP TABLE IF EXISTS Historial_Citas;
+DROP TABLE IF EXISTS Historial_Citas;
 CREATE TABLE Historial_Citas (
     idHistorico INT AUTO_INCREMENT PRIMARY KEY,
     idCita INT NOT NULL,

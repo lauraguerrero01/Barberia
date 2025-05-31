@@ -1,0 +1,14 @@
+Estimado Instructor Demetrio,
+
+Le informamos el orden en el que se debe ejecutar cada archivo para que funcione correctamente.
+
+1.Barberia
+2.PROCEDURES
+3.Datos
+4.Funciones-Procedimientos-Triggers
+
+Adicional se encuentra un archivo llamado "Ejemplos Procesos" en el cual podrá evaluar la funcionalidad del ejercicio solicitado en la actividad "Funciones-Procedimientos-Triggers"
+
+Gracias por su tiempo.
+
+Saludos,
